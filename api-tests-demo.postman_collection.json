@@ -1,0 +1,164 @@
+{
+	"info": {
+		"_postman_id": "4a78309a-e8f0-42ca-a6ab-e3a8731d37b8",
+		"name": "Automation Tests Demo(OpenWeather)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get weather of particular City",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1e587264-e461-485c-85dd-a01cf5c6c6de",
+						"exec": [
+							"pm.test(\"Response should be okay\", function () {",
+							"    // Postive checkpoints",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"    pm.expect(pm.response.json().cod).to.eql(200);",
+							"",
+							"    // Negative checkpoints",
+							"    pm.response.to.not.be.error;",
+							"    pm.response.to.not.have.jsonBody(\"error\");",
+							"});",
+							"",
+							"pm.test(\"Location should be accurate\", function () {",
+							"   pm.expect(pm.response.json().coord.lon).to.be.above(72);",
+							"   pm.expect(pm.response.json().coord.lon).to.be.below(73);",
+							"   pm.expect(pm.response.json().coord.lat).to.be.above(21);",
+							"   pm.expect(pm.response.json().coord.lat).to.be.below(22);",
+							"});",
+							"",
+							"pm.test(\"Country should be correct\", function () {",
+							"   pm.expect(pm.response.json().sys.country).to.be.eql(\"IN\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "api.openweathermap.org/data/2.5/weather?q=surat&APPID={{OpenWeatherKey}}",
+					"host": [
+						"api",
+						"openweathermap",
+						"org"
+					],
+					"path": [
+						"data",
+						"2.5",
+						"weather"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "surat"
+						},
+						{
+							"key": "APPID",
+							"value": "{{OpenWeatherKey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get forecast of that City",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e1e5c9e2-f7c5-446b-8757-11e6b4305546",
+						"exec": [
+							"pm.sendRequest(`https://api.openweathermap.org/data/2.5/weather?q=surat&APPID=${pm.globals.get(\"OpenWeatherKey\")}`, function (err, response) {",
+							"    console.log(response.json());",
+							"    // Set this as a variables",
+							"    pm.variables.set(\"cityLat\", response.json().coord.lon);",
+							"    pm.variables.set(\"cityLon\", response.json().coord.lat);",
+							"});",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "5277792d-e8c9-4876-976e-b2b22f3e5f2e",
+						"exec": [
+							"pm.test(\"Check the local variables for Lat and Long are cleared\", function () {",
+							"    let cityLatVar = \"cityLat\";",
+							"    let cityLonlVar = \"cityLon\";",
+							"    ",
+							"    // Unset the variables",
+							"    pm.variables.unset(cityLatVar);",
+							"    pm.variables.unset(cityLonlVar);",
+							"    ",
+							"    // Check variables should be undefined now",
+							"    pm.expect(pm.variables.get(cityLatVar)).to.be.undefined;",
+							"    pm.expect(pm.variables.get(cityLonlVar)).to.be.undefined;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Current weather should suggest the rain\", function () {",
+							"    pm.expect(pm.response.json().current.weather[0].main).to.eq(\"Rain\");",
+							"    pm.expect(pm.response.json().current.weather[0].description).to.include(\"rain\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.openweathermap.org/data/2.5/onecall?lat={{cityLat}}&lon={{cityLon}}&appid={{OpenWeatherKey}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openweathermap",
+						"org"
+					],
+					"path": [
+						"data",
+						"2.5",
+						"onecall"
+					],
+					"query": [
+						{
+							"key": "lat",
+							"value": "{{cityLat}}"
+						},
+						{
+							"key": "lon",
+							"value": "{{cityLon}}"
+						},
+						{
+							"key": "appid",
+							"value": "{{OpenWeatherKey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

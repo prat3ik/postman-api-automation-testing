@@ -1,0 +1,14 @@
+{
+	"id": "07fc93fb-95a1-4e28-84d1-f0f3fe7a0516",
+	"values": [
+		{
+			"key": "OpenWeatherKey",
+			"value": "cd1991cdc733c33f0027452655c2cfb0",
+			"enabled": true
+		}
+	],
+	"name": "Kubric Globals",
+	"_postman_variable_scope": "globals",
+	"_postman_exported_at": "2020-09-21T07:01:53.802Z",
+	"_postman_exported_using": "Postman/7.32.0"
+}
