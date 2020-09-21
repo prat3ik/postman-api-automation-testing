@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   # Newman orb for calling APIs + executing API tests from the POTMAN collection.
-  newman: postman/newman@1.0.0
+  newman: postman/newman@0.0.2
 jobs:
   newman-collection-run-env-timeout:
     executor: newman/postman-newman-docker
