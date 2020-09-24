@@ -11,7 +11,7 @@ jobs:
       - checkout
       - newman/newman-run:
           collection: ./api-tests-demo.postman_collection.json
-          environment: ./kubric.postman_globals.json
+          globals: ./kubric.postman_globals.json
 workflows:
   version: 2
   workflow:
