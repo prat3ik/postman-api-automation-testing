@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "4a78309a-e8f0-42ca-a6ab-e3a8731d37b8",
+		"_postman_id": "d20a53bd-8b72-4cbd-89cd-c2379913fd75",
 		"name": "Automation Tests Demo(OpenWeather)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -11,7 +11,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "1e587264-e461-485c-85dd-a01cf5c6c6de",
 						"exec": [
 							"pm.test(\"Response should be okay\", function () {",
 							"    // Postive checkpoints",
@@ -34,7 +33,9 @@
 							"",
 							"pm.test(\"Country should be correct\", function () {",
 							"   pm.expect(pm.response.json().sys.country).to.be.eql(\"IN\");",
-							"});"
+							"});",
+							"",
+							"pm.globals.set(\"cityname\", pm.response.name);"
 						],
 						"type": "text/javascript"
 					}
@@ -78,9 +79,9 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "e1e5c9e2-f7c5-446b-8757-11e6b4305546",
 						"exec": [
-							"pm.sendRequest(`https://api.openweathermap.org/data/2.5/weather?q=surat&APPID=${pm.globals.get(\"OpenWeatherKey\")}`, function (err, response) {",
+							"pm.sendRequest(`https://api.openweathermap.org/data/2.5/weather?q=surat&APPID=${pm.collectionVariables.get(\"OpenWeatherKey\")}`, function (err, response) {",
+							"    console.log(\"Respose of the weather API:\");",
 							"    console.log(response.json());",
 							"    // Set this as a variables",
 							"    pm.variables.set(\"cityLat\", response.json().coord.lon);",
@@ -89,6 +90,11 @@
 							"",
 							"",
 							"",
+							"const aa = pm.variables.get(\"cityname\")",
+							"console.log(\"local var:\" + aa);",
+							"",
+							"const aa1 = pm.collectionVariables.get(\"cityname1\")",
+							"console.log(\"collection var:\" + aa1);",
 							""
 						],
 						"type": "text/javascript"
@@ -97,7 +103,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "5277792d-e8c9-4876-976e-b2b22f3e5f2e",
 						"exec": [
 							"pm.test(\"Check the local variables for Lat and Long are cleared\", function () {",
 							"    let cityLatVar = \"cityLat\";",
@@ -160,5 +165,34 @@
 			"response": []
 		}
 	],
-	"protocolProfileBehavior": {}
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "OpenWeatherKey",
+			"value": "cd1991cdc733c33f0027452655c2cfb0"
+		},
+		{
+			"key": "cityname1",
+			"value": ""
+		}
+	]
 }
