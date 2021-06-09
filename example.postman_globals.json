@@ -7,7 +7,7 @@
 			"enabled": true
 		}
 	],
-	"name": "Kubric Globals",
+	"name": "Globals",
 	"_postman_variable_scope": "globals",
 	"_postman_exported_at": "2020-09-21T07:01:53.802Z",
 	"_postman_exported_using": "Postman/7.32.0"
